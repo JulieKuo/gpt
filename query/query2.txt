@@ -1,0 +1,29 @@
+生成python程式碼來查詢MySQL資料庫, 使用pymysql查詢, 完成後關閉連線。
+將資料儲存成csv檔, 並保留欄位名稱。
+只要程式碼就好, 不須其他解釋。
+
+MySQL連線資訊: 
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    password: !zxcvb
+
+查詢sakila資料庫中的payment資料表。
+回傳payment_id, customer_id, staff_id, rental_id, amount, last_update欄位。
+
+資料期間:無
+
+篩選條件:
+    (
+        rantal_id小於10000
+        或
+        customer_id等於36
+    )
+    且
+    last_update大於等於起始時間
+    且
+    last_update小於等於結束時間
+
+分群計算:無
+
+SQL的敘述語句須包含篩選條件和分群計算。

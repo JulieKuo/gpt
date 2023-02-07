@@ -1,5 +1,5 @@
 from log_config import Log
-import json, os, openai
+import os, json, openai
 
 
 
@@ -10,16 +10,16 @@ def read_config(config_path):
 
 
 
-def get_query(query_path, data_path, query_venv_path):
+def get_query(query, data, query_venv):
     logging.info(f"Get query.")
 
-    with open(query_path, 'r', encoding = "utf-8") as f:
+    with open(query, 'r', encoding = "utf-8") as f:
         prompt1 = f.read()
 
-    with open(query_venv_path, 'r', encoding = "utf-8") as f:
+    with open(query_venv, 'r', encoding = "utf-8") as f:
         prompt2 = f.read()
 
-    prompt1 += f"\n    資料存檔的絕對路徑為{data_path}。\n\n"
+    prompt1 += f"\n    資料存檔的絕對路徑為{data}。\n\n"
 
     prompt1 = prompt1.replace(
         "資料期間:無",
@@ -46,50 +46,55 @@ def connect_gpt(openai, api_key, prompt):
 
     response1 = response['choices'][0]['text'].lstrip("\n")
     code, requirements = response1.split("\n2.")
-    code = code.replace("1.", "").lstrip("\n").rstrip("\n")
+    code = code.replace("Answer:", "").replace("1.", "").lstrip("\n").rstrip("\n")
     requirements = requirements.lstrip("\n")
 
     return code, requirements
 
 
 
-def save_file(code, requirements, python_path, requirements_path):
+def save_file(code, package, python, requirements):
     logging.info(f"Save response python file.")
 
-    with open(python_path, 'w', encoding = "utf-8") as f:
+    with open(python, 'w', encoding = "utf-8") as f:
         f.write(code)
     
-    with open(requirements_path, 'w', encoding = "utf-8") as f:
-        f.write(requirements)
+    with open(requirements, 'w', encoding = "utf-8") as f:
+        f.write(package)
 
     logging.info(f"Finish!")
 
 
 
 def main():
-    config = read_config(config_path = "./config.json")
+    config = read_config(config_path = ".\config.json")
 
     root = config["root"]
-    query_path = root + "/" + config["query_path"]
-    data_path = root + "/" + config["data_path"]
-    query_venv_path = root + "/" + config["query_venv_path"]
-    python_path = root + "/" + config["python_path"]
-    requirements_path = root + "/" + config["requirements_path"]
-    result_path = root + "/" + config["result_path"]
+    data_path = os.path.join("data", config["time"])
+    query = os.path.join(root, data_path, config["query"])
+    data = os.path.join(root, data_path, config["data"])
+    query_venv = os.path.join(root, "data", config["query_venv"])
+    python = os.path.join(root, data_path, config["python"])
+    requirements = os.path.join(root, data_path, config["requirements"])
+    # result = os.path.join(root, data_path, config["result"])
+    log_path = os.path.join(root, config["log_path"])
+    exe_log_path = os.path.join(root, config["exe_log_path"])
     api_key = config["api_key"]
-    log_path = root + "/" + config["log_path"]
-    exe_log_path = root + "/" + config["exe_log_path"]
+
+    folder = os.path.join(root, data_path)
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
 
 
     log = Log()
     global logging
     logging = log.set_log(filepath = log_path, level = 2, freq = "D", interval = 50)
 
-    prompt = get_query(query_path, data_path, query_venv_path)
+    prompt = get_query(query, data, query_venv)
 
-    code, requirements = connect_gpt(openai, api_key, prompt)
+    code, package = connect_gpt(openai, api_key, prompt)
 
-    save_file(code, requirements, python_path, requirements_path)
+    save_file(code, package, python, requirements)
 
     log.shutdown()
 

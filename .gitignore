@@ -1,7 +1,4 @@
 chart
-data/*.csv
+data/*/*
 logs/*.log
-query/*.txt
-requirement/*.txt
-response/*.py
-result/*.exe
+!data/*/query.txt

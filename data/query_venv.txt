@@ -1,0 +1,5 @@
+2. 生成requirements.txt, 依序列出使用的package還有版本。
+
+回答格式:
+1. 
+2. 

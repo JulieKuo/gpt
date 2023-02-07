@@ -1,0 +1,30 @@
+生成python程式碼來查詢MySQL資料庫, 使用pymysql查詢, 完成後關閉連線。
+將資料儲存成csv檔, 並保留欄位名稱。
+只要程式碼就好, 不須其他解釋。
+
+MySQL連線資訊: 
+    host: 127.0.0.1
+    port: 3306
+    user: root
+    password: !zxcvb
+    db: sakila
+
+查詢payment資料表。
+回傳customer_id欄位。
+
+資料期間:無
+
+篩選條件:
+    customer_id小於20
+    且
+    last_update大於等於起始時間
+    且
+    last_update小於等於結束時間
+
+分群計算:
+    分群customer_id, 依序計算並返回新欄位
+        1. count: 每群的數量
+        2. staff_id_type: 每群staff_id的種類數量
+        3. total_amount: amount的加總
+
+SQL的敘述語句須包含篩選條件和分群計算。
