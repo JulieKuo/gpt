@@ -1,0 +1,7 @@
+chart
+data/*.csv
+logs/*.log
+query/*.txt
+requirement/*.txt
+response/*.py
+result/*.exe

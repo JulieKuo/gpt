@@ -1,0 +1,18 @@
+{
+    "root": "C:/Users/tzuli/Documents/python/chatgpt",
+    "query_path": "query/query4.txt",
+    "data_path": "data/data3.csv",
+    "query_venv_path": "query/query_venv.txt",
+    "python_path": "response/response3.py",
+    "requirements_path": "requirement/requirements.txt",
+    "result_path": "result",
+    "database_config":{
+        "host": "127.0.0.1",
+        "port": 3306,
+        "user": "root",
+        "password": "!zxcvb"
+    },
+    "api_key": "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",
+    "log_path": "logs/log.log",
+    "exe_log_path": "logs/gen_exe.log"
+}
