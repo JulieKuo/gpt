@@ -1,5 +1,7 @@
 from log_config import Log
+from transformers import GPT2TokenizerFast
 import os, json, openai
+from traceback import format_exc
 
 
 
@@ -11,7 +13,7 @@ def read_config(config_path):
 
 
 def get_query(query, data, query_venv):
-    logging.info(f"Get query.")
+    logging.info("Get query.")
 
     with open(query, 'r', encoding = "utf-8") as f:
         prompt1 = f.read()
@@ -33,8 +35,7 @@ def get_query(query, data, query_venv):
     
 
 
-
-def connect_gpt(openai, api_key, prompt):
+def connect_gpt(openai, api_key, prompt, raw_response):
     openai.api_key = api_key
 
     response = openai.Completion.create(
@@ -45,16 +46,20 @@ def connect_gpt(openai, api_key, prompt):
     )
 
     response1 = response['choices'][0]['text'].lstrip("\n")
-    code, requirements = response1.split("\n2.")
+
+    with open(raw_response, 'w', encoding = "utf-8") as f:
+        f.write(response1)
+
+    code, package = response1.split("\n2.")
     code = code.replace("Answer:", "").replace("1.", "").lstrip("\n").rstrip("\n")
-    requirements = requirements.lstrip("\n")
+    package = package.lstrip("\n")
 
-    return code, requirements
+    return code, package, response1
 
 
 
-def save_file(code, package, python, requirements):
-    logging.info(f"Save response python file.")
+def save_response(code, package, python, requirements):
+    logging.info("Save response file.")
 
     with open(python, 'w', encoding = "utf-8") as f:
         f.write(code)
@@ -62,41 +67,85 @@ def save_file(code, package, python, requirements):
     with open(requirements, 'w', encoding = "utf-8") as f:
         f.write(package)
 
-    logging.info(f"Finish!")
+
+
+def generate_exe(data_path, requirements, python, exe_log_path):
+    cmd = f'.\gen_exe.bat "{data_path}" "{requirements}" "{python}" "{exe_log_path}"'    
+    logging.info(f"Generate exe.\n{cmd}")
+
+    os.system(cmd)
+
+
+
+def calculate_token(prompt, response):
+    logging.info("Calculate tokens.")
+    text = prompt + response
+    tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
+    n_tokens = len(tokenizer.encode(text))
+
+    return n_tokens
+
+
+
+def save_status(result, status, n_tokens):
+    logging.info("Save result.")
+
+    result_dict = {
+        "status": status,
+        "n_tokens": n_tokens
+    }
+
+    with open(result, 'w') as f:
+        json.dump(result_dict, f, indent = 4)
+
+    logging.info("Finish!")
 
 
 
 def main():
-    config = read_config(config_path = ".\config.json")
+    try:
+        config = read_config(config_path = ".\config.json")
 
-    root = config["root"]
-    data_path = os.path.join("data", config["time"])
-    query = os.path.join(root, data_path, config["query"])
-    data = os.path.join(root, data_path, config["data"])
-    query_venv = os.path.join(root, "data", config["query_venv"])
-    python = os.path.join(root, data_path, config["python"])
-    requirements = os.path.join(root, data_path, config["requirements"])
-    # result = os.path.join(root, data_path, config["result"])
-    log_path = os.path.join(root, config["log_path"])
-    exe_log_path = os.path.join(root, config["exe_log_path"])
-    api_key = config["api_key"]
+        root = config["root"]
+        data_path = os.path.join(root, "data", config["time"])
+        query = os.path.join(data_path, config["query"])
+        data = os.path.join(data_path, config["data"])
+        query_venv = os.path.join(root, "data", config["query_venv"])
+        raw_response = os.path.join(data_path, config["raw_response"])
+        python = os.path.join(data_path, config["python"])
+        requirements = os.path.join(data_path, config["requirements"])
+        result = os.path.join(data_path, config["result"])
+        log_path = os.path.join(root, config["log_path"])
+        exe_log_path = os.path.join(root, config["exe_log_path"])
+        api_key = config["api_key"]
 
-    folder = os.path.join(root, data_path)
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
+        folder = os.path.join(root, data_path)
+        if not os.path.isdir(folder):
+            os.makedirs(folder)
 
 
-    log = Log()
-    global logging
-    logging = log.set_log(filepath = log_path, level = 2, freq = "D", interval = 50)
+        log = Log()
+        global logging
+        logging = log.set_log(filepath = log_path, level = 2, freq = "D", interval = 50)
 
-    prompt = get_query(query, data, query_venv)
+        prompt = get_query(query, data, query_venv)
 
-    code, package = connect_gpt(openai, api_key, prompt)
+        code, package, response = connect_gpt(openai, api_key, prompt, raw_response)
 
-    save_file(code, package, python, requirements)
+        save_response(code, package, python, requirements)
 
-    log.shutdown()
+        generate_exe(data_path, requirements, python, exe_log_path)
+
+        n_tokens = calculate_token(prompt, response)
+
+        save_status(result, "success", n_tokens)
+    
+    except:
+        save_status(result, "fail", 0)
+        logging.error(format_exc())
+
+    finally:
+        log.shutdown()
 
 
 

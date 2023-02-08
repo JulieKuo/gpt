@@ -4,16 +4,11 @@
     "query": "query.txt",
     "data": "data.csv",
     "query_venv": "query_venv.txt",
+    "raw_response": "raw_response.txt",
     "python": "response.py",
     "requirements": "requirements.txt",
-    "result": "result",
+    "result": "result.json",
     "log_path": "logs\\log.log",
     "exe_log_path": "logs\\gen_exe.log",
     "api_key": "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",
-    "database_config":{
-        "host": "127.0.0.1",
-        "port": 3306,
-        "user": "root",
-        "password": "!zxcvb"
-    }
 }
