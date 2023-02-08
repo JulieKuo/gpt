@@ -12,7 +12,9 @@
     查詢payment資料表。
     回傳customer_id欄位。
 
-    資料期間:無
+    用sys.argv接收命令列參數:
+    1. 起始時間
+    2. 結束時間
 
     篩選條件:
         customer_id小於20
@@ -28,3 +30,10 @@
             3. total_amount: amount的加總
 
     SQL的敘述語句須包含篩選條件和分群計算。
+    資料存檔的絕對路徑為C:\Users\tzuli\Documents\python\chatgpt\data\202302071729\data.csv。
+
+2. 生成requirements.txt, 依序列出使用的package還有版本。
+
+回答格式:
+1. 
+2. 

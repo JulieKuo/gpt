@@ -1,10 +1,10 @@
 @echo off
 
 
-set data_path = %1
-set requirements = %2
-set python = %3
-set log_path = %4
+set data_path=%1
+set requirements=%2
+set python=%3
+set log_path=%4
 
 
 cd /d %data_path% 
