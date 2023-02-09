@@ -51,8 +51,9 @@ def connect_gpt(openai, api_key, prompt, raw_response):
         f.write(response1)
 
     code, package = response1.split("\n2.")
-    code = code.replace("Answer:", "").replace("1.", "").lstrip("\n").lstrip(" ").rstrip("\n").rstrip(" ")
-    package = package.lstrip("\n").lstrip(" ")
+    start_index = code.find("import")
+    code = code[start_index:].rstrip("\n").rstrip(" ")
+    package = package.lstrip("\n").lstrip(" ").rstrip("\n").rstrip(" ")
 
     return code, package, response1
 
