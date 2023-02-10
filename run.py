@@ -12,7 +12,7 @@ def read_config(config_path):
 
 
 
-def get_query(query, data, query_venv):
+def get_query(query, data, query_venv, total_query):
     logging.info("Get query.")
 
     with open(query, 'r', encoding = "utf-8") as f:
@@ -21,15 +21,17 @@ def get_query(query, data, query_venv):
     with open(query_venv, 'r', encoding = "utf-8") as f:
         prompt2 = f.read()
 
-    prompt1 += f"\n    資料存檔的絕對路徑為{data}。\n\n"
+    data1 = data.replace("\\", "/")
+    prompt1 += f"\n    資料存檔的絕對路徑為{data1}。\n\n"
 
     prompt1 = prompt1.replace(
         "資料期間:無",
-        f"用sys.argv接收命令列參數:\n    1. 起始時間\n    2. 結束時間"
+        f"用sys.argv接收命令列參數, 參數皆為時間, 在SQL敘述句中需以(')包住參數:\n    1. 起始時間\n    2. 結束時間"
         )
     prompt1 += prompt2
 
-    logging.info(f"<< Question >>\n{prompt1}")
+    with open(total_query, 'w', encoding = "utf-8") as f:
+        f.write(prompt1)
 
     return prompt1
     
@@ -112,6 +114,7 @@ def main():
         query = os.path.join(data_path, config["query"])
         data = os.path.join(data_path, config["data"])
         query_venv = os.path.join(root, "data", config["query_venv"])
+        total_query = os.path.join(data_path, config["total_query"])
         raw_response = os.path.join(data_path, config["raw_response"])
         python = os.path.join(data_path, config["python"])
         requirements = os.path.join(data_path, config["requirements"])
@@ -129,7 +132,7 @@ def main():
         global logging
         logging = log.set_log(filepath = log_path, level = 2, freq = "D", interval = 50)
 
-        prompt = get_query(query, data, query_venv)
+        prompt = get_query(query, data, query_venv, total_query)
 
         code, package, response = connect_gpt(openai, api_key, prompt, raw_response)
 

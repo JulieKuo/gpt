@@ -4,6 +4,7 @@
     "query": "query.txt",
     "data": "data.csv",
     "query_venv": "query_venv.txt",
+    "total_query": "total_query.txt",
     "raw_response": "raw_response.txt",
     "python": "response.py",
     "requirements": "requirements.txt",
