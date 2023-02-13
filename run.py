@@ -12,32 +12,33 @@ def read_config(config_path):
 
 
 
-def get_query(query, data, query_venv, total_query):
+def get_query(query, data, query_venv, total_query, type_):
     logging.info("Get query.")
 
     with open(query, 'r', encoding = "utf-8") as f:
         prompt1 = f.read()
 
-    with open(query_venv, 'r', encoding = "utf-8") as f:
-        prompt2 = f.read()
+    if type_ == "python":
+        with open(query_venv, 'r', encoding = "utf-8") as f:
+            prompt2 = f.read()
 
-    data1 = data.replace("\\", "/")
-    prompt1 += f"\n    資料存檔的絕對路徑為{data1}。\n\n"
+        data1 = data.replace("\\", "/")
+        prompt1 += f"\n    資料存檔的絕對路徑為{data1}。\n\n"
 
-    prompt1 = prompt1.replace(
-        "資料期間:無",
-        f"用sys.argv接收命令列參數, 參數皆為時間, 在SQL敘述句中需以(')包住參數:\n    1. 起始時間\n    2. 結束時間"
-        )
-    prompt1 += prompt2
+        prompt1 = prompt1.replace(
+            "資料期間:無",
+            f"用sys.argv接收命令列參數, 參數皆為時間, 在SQL敘述句中需以(')包住參數:\n    1. 起始時間\n    2. 結束時間"
+            )
+        prompt1 += prompt2
 
-    with open(total_query, 'w', encoding = "utf-8") as f:
-        f.write(prompt1)
+        with open(total_query, 'w', encoding = "utf-8") as f:
+            f.write(prompt1)
 
     return prompt1
     
 
 
-def connect_gpt(openai, api_key, prompt, raw_response):
+def connect_gpt(openai, api_key, prompt, raw_response, type_):
     openai.api_key = api_key
 
     response = openai.Completion.create(
@@ -49,31 +50,35 @@ def connect_gpt(openai, api_key, prompt, raw_response):
 
     response1 = response['choices'][0]['text'].lstrip("\n")
 
-    with open(raw_response, 'w', encoding = "utf-8") as f:
-        f.write(response1)
+    if type_ == "python":
+        with open(raw_response, 'w', encoding = "utf-8") as f:
+            f.write(response1)
 
-    code, package = response1.split("\n2.")
-    start_index = code.find("import")
-    code = code[start_index:].rstrip("\n").rstrip(" ")
-    package = package.lstrip("\n").lstrip(" ").rstrip("\n").rstrip(" ")
+        code, package = response1.split("\n2.")
+        start_index = code.find("import")
+        code = code[start_index:].rstrip(" ").rstrip("\n")
+        package = package.lstrip(" ").lstrip("\n").rstrip(" ").rstrip("\n")
 
-    return code, package, response1
+        return code, package, response1
+    else:
+        return response1, None, response1
 
 
 
-def save_response(code, package, python, requirements):
+def save_response(code, package, code_path, requirements, type_):
     logging.info("Save response file.")
 
-    with open(python, 'w', encoding = "utf-8") as f:
+    with open(code_path, 'w', encoding = "utf-8") as f:
         f.write(code)
     
-    with open(requirements, 'w', encoding = "utf-8") as f:
-        f.write(package)
+    if type_ == "python":
+        with open(requirements, 'w', encoding = "utf-8") as f:
+            f.write(package)
 
 
 
-def generate_exe(data_path, requirements, python, exe_log_path):
-    cmd = f'.\gen_exe.bat "{data_path}" "{requirements}" "{python}" "{exe_log_path}"'    
+def generate_exe(data_path, requirements, code_path, exe_log_path):
+    cmd = f'.\gen_exe.bat "{data_path}" "{requirements}" "{code_path}" "{exe_log_path}"'    
     logging.info(f"Generate exe.\n{cmd}")
 
     os.system(cmd)
@@ -116,12 +121,13 @@ def main():
         query_venv = os.path.join(root, "data", config["query_venv"])
         total_query = os.path.join(data_path, config["total_query"])
         raw_response = os.path.join(data_path, config["raw_response"])
-        python = os.path.join(data_path, config["python"])
+        code_path = os.path.join(data_path, config["code"])
         requirements = os.path.join(data_path, config["requirements"])
         result = os.path.join(data_path, config["result"])
         log_path = os.path.join(root, config["log_path"])
         exe_log_path = os.path.join(root, config["exe_log_path"])
         api_key = config["api_key"]
+        type_ = config["type"]
 
         folder = os.path.join(root, data_path)
         if not os.path.isdir(folder):
@@ -132,13 +138,15 @@ def main():
         global logging
         logging = log.set_log(filepath = log_path, level = 2, freq = "D", interval = 50)
 
-        prompt = get_query(query, data, query_venv, total_query)
+        prompt = get_query(query, data, query_venv, total_query, type_)
 
-        code, package, response = connect_gpt(openai, api_key, prompt, raw_response)
+        
+        code, package, response = connect_gpt(openai, api_key, prompt, raw_response, type_)
 
-        save_response(code, package, python, requirements)
+        save_response(code, package, code_path, requirements, type_)
 
-        generate_exe(data_path, requirements, python, exe_log_path)
+        if type_ == "python":
+            generate_exe(data_path, requirements, code_path, exe_log_path)
 
         n_tokens = calculate_token(prompt, response)
 

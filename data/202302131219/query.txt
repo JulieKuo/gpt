@@ -1,0 +1,5 @@
+請生成一份靜態的HTML檔案。
+使用react套件和原始js語法。
+資料欄位有city, customer, start_date, end_date。
+可讓使用者填寫start_date, end_date，送出後即可查詢該時間區間的資料。
+查詢出這段區間內的city和customer的資料。
