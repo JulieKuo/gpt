@@ -1,4 +1,6 @@
 chart
 data/*/*
 logs/*.log
+__pycache__
+
 !data/*/query.txt
