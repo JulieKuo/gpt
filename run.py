@@ -8,7 +8,7 @@ try:
     config = read_config(config_path = ".\config.json")
 
     root = config["root"]
-    data_path = os.path.join(root, "data", config["time"])
+    data_path = os.path.join(root, "data", config["id"])
     data_path1 = os.path.join(data_path, "data")
     run_log_path = os.path.join(root, config["run_log"])
     exe_log_path = os.path.join(root, config["exe_log"])
