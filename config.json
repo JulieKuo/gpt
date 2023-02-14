@@ -1,16 +1,8 @@
 {
     "root": "C:\\Users\\tzuli\\Documents\\python\\chatgpt",
-    "time": "202302131219",
-    "query": "query.txt",
-    "data": "data.csv",
-    "query_venv": "query_venv.txt",
-    "total_query": "total_query.txt",
-    "raw_response": "raw_response.txt",
-    "code": "response.html",
-    "requirements": "requirements.txt",
-    "result": "result.json",
-    "log_path": "logs\\log.log",
-    "exe_log_path": "logs\\gen_exe.log",
+    "time": "202302140941",
+    "run_log": "logs\\log.log",
+    "exe_log": "logs\\gen_exe.log",
     "api_key": "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",
-    "type": "other"
+    "type": "py"
 }

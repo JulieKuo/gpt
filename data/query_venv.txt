@@ -1,5 +1,5 @@
-2. 生成requirements.txt, 依序列出使用的package還有版本。
+以下為python檔中的代碼:
+{packages}
+請辨識上方代碼，找出不在Python內置模組的模組，並生成相應的requirements.txt，其中需列出使用的package名稱和最新版本。
 
-回答格式:
-1. 
-2. 
+只返回txt檔內容，不需其他解釋。

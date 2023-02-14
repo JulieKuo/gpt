@@ -29,7 +29,7 @@ echo 7. Generate exe file from %python% >> %log_path%
 pyinstaller -F %python%
 
 echo 8. Move exe file to upper directory >> %log_path%
-move dist\*.exe %data_path%
+move dist\*.exe %data_path%\..
 
 echo 9. Delete folders and files >> %log_path%
 rd /s /q .venv

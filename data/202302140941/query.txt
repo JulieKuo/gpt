@@ -1,0 +1,24 @@
+使用Python生成以下程式碼，只返回代碼，不需其他解釋。
+
+使用pymysql查詢MySQL資料庫, 完成後關閉連線。
+將資料儲存成csv檔, 並保留欄位名稱。
+
+MySQL連線資訊: 
+    host: 192.168.1.206
+    port: 3306
+    user: aiuser
+    password: 123EWQasdCXZ
+    db: hermesai
+
+查詢t_20230213_041015資料表。
+回傳所有欄位。
+
+用sys.argv接收命令列參數:無
+
+篩選條件:無
+
+分群計算:無
+
+SQL的敘述語句須包含篩選條件和分群計算。
+
+資料存檔的絕對路徑為file_path。
