@@ -31,10 +31,10 @@ pyinstaller -F %python%
 echo 8. Move exe file to upper directory >> %log_path%
 move dist\*.exe %data_path%\..
 
+timeout /t 1
+
 echo 9. Delete folders and files >> %log_path%
-rd /s /q .venv
-rd /s /q build
-rd /s /q dist
+rd /s /q .venv build dist
 del /f /q *.spec
 
 echo 10. Deactivate >> %log_path%

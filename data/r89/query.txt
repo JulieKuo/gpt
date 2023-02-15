@@ -1,7 +1,8 @@
-使用Python生成以下程式碼，只返回代碼，不需其他解釋。
+使使用Python生成以下程式碼，只返回代碼，不需其他解釋。
 
 使用pymysql查詢MySQL資料庫, 完成後關閉連線。
 將資料儲存成csv檔, 並保留欄位名稱。
+SQL敘述語句使用format來將參數傳入。
 
 MySQL連線資訊: 
     host: 192.168.1.206
@@ -10,15 +11,36 @@ MySQL連線資訊:
     password: 123EWQasdCXZ
     db: hermesai
 
-查詢t_20230213_041015資料表。
-回傳所有欄位。
+用sys.argv接收命令列參數:
+    param1
 
-用sys.argv接收命令列參數:無
+SQL敘述語句1:
+    查詢m_table_map資料表。
+    回傳t_name, camera_name欄位。
 
-篩選條件:無
+    篩選條件:
+        camera_name in (
+            查詢a_combination_info資料表。
+            回傳camera_name欄位。
 
-分群計算:無
+            篩選條件:
+                comb_name in (param1)
+        )
 
-SQL的敘述語句須包含篩選條件和分群計算。
+tables = 回傳結果中的t_name欄位。
+印出tables。
+
+依序查詢tables中的所有資料表。
+
+SQL敘述語句2:
+    查詢tables中的第n個資料表
+    回傳所有欄位。
+    
+    篩選條件:
+        start_time >= '2023-02-13'
+        且
+        false_triggered != 0
+
+合併各資料表的查詢結果。
 
 資料存檔的絕對路徑為file_path。
