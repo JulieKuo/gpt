@@ -35,7 +35,7 @@ def get_import(code):
 
 
 
-def get_query(data_path, data_path1, type_, file_path, csv_file = "data.csv", code = ""):
+def get_query(data_path, data_path1, type_, file_path, code = ""):
     query_path = os.path.join(data_path, file_path)
     
     logging.info(f"Get query from {query_path}.")
@@ -47,9 +47,10 @@ def get_query(data_path, data_path1, type_, file_path, csv_file = "data.csv", co
         prompt1 = f.read()
 
     if type_ == "py":
-        csv_path = os.path.join(data_path, csv_file)
-        data1 = csv_path.replace("\\", "/")
-        prompt1 = prompt1.replace("file_path", data1)
+        csv_path = os.path.join(data_path, "data.csv")
+        csv_path = csv_path.replace("\\", "/")
+        html_path = csv_path.replace(".csv", ".html")
+        prompt1 = prompt1.replace("file_path_csv", csv_path).replace("file_path_html", html_path)
 
     elif type_ == "package":
         imports = get_import(code)
@@ -71,7 +72,7 @@ def connect_gpt(api_key, query_py, type_):
     response = openai.Completion.create(
         model = "text-davinci-003",
         prompt = query_py,
-        temperature = 0.8,
+        temperature = 0.2,
         max_tokens = 3000,
         )
 
