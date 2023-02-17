@@ -4,5 +4,6 @@
     "run_log": "logs\\log.log",
     "exe_log": "logs\\gen_exe.log",
     "api_key": "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",
-    "type": "py"
+    "type": "py",
+    "params": ["2023-02-13", "2023-02-16", "'R89_no7', 'R89_no8'", "1"]
 }

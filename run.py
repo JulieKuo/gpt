@@ -47,6 +47,7 @@ try:
         total_response += response_venv
 
         generate_exe(data_path1, response_venv_path, response_path, exe_log_path)
+        # save_html(data_path)
 
     n_tokens = calculate_token(total_query, total_response)
     save_status(data_path, "success", n_tokens)

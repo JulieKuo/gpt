@@ -1,5 +1,6 @@
 import os, openai, json
 from transformers import GPT2TokenizerFast
+import pandas as pd
 
 
 
@@ -97,6 +98,20 @@ def generate_exe(data_path1, response_venv_path, response_py_path, exe_log_path)
     logging.info(f"Generate exe.\n{cmd}")
 
     os.system(cmd)
+
+
+
+def save_html(data_path, max_row = 20):
+    logging.info("Save html.")
+
+    csv_path = os.path.join(data_path, "data.csv")
+    html_path =  os.path.join(data_path, "data.html")
+
+    df = pd.read_csv(csv_path)
+    html_table = df.iloc[:max_row].to_html()
+
+    with open(html_path, 'w') as f:
+        f.write(html_table)
 
 
 
