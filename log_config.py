@@ -4,7 +4,7 @@ from logging.handlers import TimedRotatingFileHandler
 
 
 class Log():
-    def set_log(self, filepath = "logs/log.log", level = 3, freq = "W", interval = 2, backup = 2):
+    def set_log(self, filepath = "logs/log.log", level = 3, freq = "W", interval = 2, backup = 2, name = "a"):
         format = '%(asctime)s %(levelname)s %(message)s'
         datefmt = '%Y-%m-%d %H:%M:%S'
         level_dict = {
@@ -19,7 +19,7 @@ class Log():
 
         log_level = level_dict[level]
 
-        self.logger = logging.getLogger()
+        self.logger = logging.getLogger(name = name)
         self.logger.setLevel(log_level)
 
         self.hdlr = TimedRotatingFileHandler(filename = filepath, when = freq, interval = interval, backupCount = backup, encoding='utf-8')

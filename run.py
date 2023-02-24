@@ -1,62 +1,76 @@
 from log_config import Log
 from traceback import format_exc
 from utils import *
+import os, shutil
 
 
 
-try:
-    config = read_config(config_path = ".\config.json")
+def main():
+    try:
+        config = read_config(config_path = ".\config.json")
 
-    root = config["root"]
-    data_path = os.path.join(root, "data", config["id"])
-    data_path1 = os.path.join(data_path, "data")
-    run_log_path = os.path.join(root, config["run_log"])
-    exe_log_path = os.path.join(root, config["exe_log"])
-    api_key = config["api_key"]
-    type_ = config["type"]
+        root = config["root"]
+        data_path = os.path.join(root, "data", f"{config['group_id']}_{config['project_id']}")
+        query_path = os.path.join(data_path, "querys")
+        final_path = os.path.join(data_path, "final")
+        src_path = os.path.join(final_path, "resources")
+        run_log_path = os.path.join(root, config["run_log"])
+        api_key = config["api_key"]
+        time = config["time"]
+        
 
-    folder = os.path.join(root, data_path1)
-    if not os.path.isdir(folder):
-        os.makedirs(folder)
+        if not os.path.exists(final_path):
+            shutil.copytree(os.path.join(root, "data", "final_template"), final_path)
+        
+        
+        if os.path.exists(query_path):
+            shutil.rmtree(query_path)
+        source_dir = os.path.join(root, "data", "querys_template")
+        shutil.copytree(source_dir, query_path)
 
-    
-    log = Log()
-    logging = activate_log(log, run_log_path)
+        
+        log = Log()
+        logging = activate_log(log, run_log_path)
 
 
-    total_query, total_response = "", ""
+        update_querys(data_path, query_path)
 
-    query = get_query(data_path, data_path1, type_, file_path = "query.txt")
-    response = connect_gpt(api_key, query, type_)
-    if type_ == "py":
-        response_path = os.path.join(data_path1, f"response.{type_}")
-    else:
-        response_path = os.path.join(data_path, f"response.{type_}")
-    save_response(response, response_path)
 
-    total_query += query
-    total_response += response
+        usages = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0}
+        responses = ""
+        
+        query_info = {
+            "main.txt": "",
+            "param.txt": "param()",
+            "sql_con.txt": "conn = sql_con()",
+            "get_data.txt": "get_data()",
+            "statistic.txt": "statistic()",
+            "condition.txt": "condition()"
+        }
 
-    if type_ == "py":
-        query_venv = get_query(data_path, data_path1, type_ = "package", file_path = "..\\query_venv.txt", code = response)
-        response_venv = connect_gpt(api_key, query_venv, type_)
-        response_venv_path = os.path.join(data_path1, "requirements.txt")
-        save_response(response_venv, response_venv_path)
+        for file_path, compair in query_info.items():
+            responses, usages = get_response(query_path, api_key, responses, usages, file_path, compair)
 
-        total_query += query_venv
-        total_response += response_venv
 
-        generate_exe(data_path1, response_venv_path, response_path, exe_log_path)
-        # save_html(data_path)
+        save_response(responses, src_path, time)
+        update_init(src_path, time)
+        update_run(final_path, time)
+        update_info(final_path, time)
+        save_status(data_path, "success", usages)
 
-    n_tokens = calculate_token(total_query, total_response)
-    save_status(data_path, "success", n_tokens)
-    logging.info("Finish!")
+        logging.info("Finish!")
 
-except:
-    logging.error(format_exc())
-    save_status(data_path, "fail", 0)
 
-finally:
-    logging.info("-"*100)
-    log.shutdown()
+    except:
+        logging.error(format_exc())
+        save_status(data_path, "fail", 0)
+
+
+    finally:
+        logging.info("-"*100)
+        log.shutdown()
+
+
+
+if __name__ == '__main__':
+    main()
