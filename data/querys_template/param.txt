@@ -1,0 +1,6 @@
+使用Python生成以下程式碼，只返回代碼，不需其他解釋。
+
+使用request.args.get()接收參數start_date，類型為string，將結果指定給變數start_date。
+使用request.args.get()接收參數end_date，類型為string，將結果指定給變數end_date。
+使用request.args.get()接收參數only_ng，類型為string，將結果指定給變數only_ng。
+使用request.args.getlist()接收參數combs[]，類型為list，將結果指定給變數combs。

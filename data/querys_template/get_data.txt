@@ -1,0 +1,12 @@
+使用Python生成以下程式碼，只返回代碼，不需其他解釋。
+
+指定一個空的dataframe給變數res3。
+
+使用for迴圈依序抓出data中的值，data為numpy格式，每個值有兩個變數，變數名稱為table和comb。
+以下為迴圈中的動作:
+SQL敘述句3:查詢table資料表，並回傳所有欄位。
+使用pd.read_sql()查詢，參數sql等於SQL敘述句3、con等於變數conn，將結果指定給變數df3。
+df3新增一個combination欄位，該欄的值為comb。
+使用pd.concat()合併res3、df3，並將結果指定給變數res3。
+
+複製res3並指定給變數data。
