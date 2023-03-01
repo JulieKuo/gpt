@@ -5,8 +5,8 @@
 載入pandas命名為pd
 載入pymysql
 
-定義一個{time}類別，此類別繼承Resource類別的功能。
-在{time}類別中定義一個get()方法，方法內容如下。
+定義一個{id}類別，此類別繼承Resource類別的功能。
+在{id}類別中定義一個get()方法，方法內容如下。
 
 param()
 
@@ -28,7 +28,7 @@ condition()
 
 statistic()
 
-使用to_dict()將data轉為字典，參數orient等於"records"，將結果指定給變數res_dict。
+使用to_dict()將data轉為字典，參數orient等於'records'，將結果指定給變數res_dict。
 建立一個字典，key1為type，value1為0；key2為data，value2為res_dict，將結果指定給變數result。
 
 關閉SQL連線。

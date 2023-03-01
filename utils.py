@@ -32,7 +32,13 @@ def update_querys(data_path, query_path):
             text = f.read()
         
         for key2, value2 in value1.items():
-            text = text.replace(f"{key2}", value2)
+            if value2 == "":
+                text = ""
+            else:
+                if key2 == "{id}":
+                    value2 = "t_" + value2
+                    
+                text = text.replace(f"{key2}", value2)
 
         with open(txt_path, 'w', encoding = "utf-8") as f:
             f.write(text)
@@ -75,6 +81,12 @@ def connect_gpt(api_key, query):
 
 def get_response(query_path, api_key, responses, usages, file_path, compair):
     query = get_query(query_path, file_path)
+    if query == "":
+        logging.info("No query.")
+        responses = responses.replace(compair, "")
+
+        return responses, usages
+    
     response, usage = connect_gpt(api_key, query)
 
     if file_path != "main.txt":
@@ -98,6 +110,38 @@ def save_response(response, src_path, time):
 
     with open(api_path, 'w', encoding = "utf-8") as f:
         f.write(response)
+
+
+
+def update_info(final_path, time):    
+    info_path = os.path.join(final_path, 'meta_info.json')
+    
+    logging.info(f"Update {info_path}.")
+
+    if not os.path.exists(info_path):
+        with open(info_path, 'w') as f:
+            json.dump({"routes": []}, f)
+
+    with open(info_path, 'r') as f:
+        info = json.load(f)
+
+    flag = False
+    routes = [route["name"] for route in info["routes"]]
+    if time not in routes:
+        new = {
+                "name": time,
+                "api_url": f"/api/r89/report/{time}"
+            }
+
+        info["routes"].append(new)
+        flag = True
+
+    info["last_update_time"] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+    with open(info_path, 'w') as f:
+        json.dump(info, f, indent = 4)
+    
+    return flag
 
 
 
@@ -135,33 +179,6 @@ def update_run(final_path, time):
 
     with open(run_path, 'w', encoding = "utf-8") as f:
         f.write(code)
-
-
-
-def update_info(final_path, time):    
-    info_path = os.path.join(final_path, 'meta_info.json')
-    
-    logging.info(f"Update {info_path}.")
-
-    if not os.path.exists(info_path):
-        with open(info_path, 'w') as f:
-            json.dump({"routes": []}, f)
-
-    with open(info_path, 'r') as f:
-        info = json.load(f)
-
-    routes = [route["name"] for route in info["routes"]]
-    if time not in routes:
-        new = {
-                "name": time,
-                "api_url": f"/api/r89/report/{time}"
-            }
-
-        info["routes"].append(new)
-    info["last_update_time"] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-
-    with open(info_path, 'w') as f:
-        json.dump(info, f, indent = 4)
 
 
 

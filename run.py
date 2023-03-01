@@ -1,7 +1,7 @@
 from log_config import Log
 from traceback import format_exc
 from utils import *
-import os, shutil
+import os, shutil, time
 
 
 
@@ -16,7 +16,7 @@ def main():
         src_path = os.path.join(final_path, "resources")
         run_log_path = os.path.join(root, config["run_log"])
         api_key = config["api_key"]
-        time = config["time"]
+        id_ = "t_" + config["id"]
         
 
         if not os.path.exists(final_path):
@@ -50,12 +50,14 @@ def main():
 
         for file_path, compair in query_info.items():
             responses, usages = get_response(query_path, api_key, responses, usages, file_path, compair)
+            time.sleep(1)
 
 
-        save_response(responses, src_path, time)
-        update_init(src_path, time)
-        update_run(final_path, time)
-        update_info(final_path, time)
+        save_response(responses, src_path, id_)
+        flag = update_info(final_path, id_)
+        if flag:
+            update_init(src_path, id_)
+            update_run(final_path, id_)
         save_status(data_path, "success", usages)
 
         logging.info("Finish!")
