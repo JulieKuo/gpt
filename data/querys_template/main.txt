@@ -28,6 +28,7 @@ condition()
 
 statistic()
 
+使用fillna()填補data的缺失值，參數value等於空字串，將結果指定給變數data。
 使用to_dict()將data轉為字典，參數orient等於'records'，將結果指定給變數res_dict。
 建立一個字典，key1為type，value1為0；key2為data，value2為res_dict，將結果指定給變數result。
 
