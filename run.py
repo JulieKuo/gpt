@@ -35,10 +35,9 @@ def main():
 
         update_querys(data_path, query_path)
 
-
-        usages = {'prompt_tokens': 0, 'completion_tokens': 0, 'total_tokens': 0}
-        responses = ""
         
+        responses = ""
+        usages = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         query_info = {
             "main.txt": "",
             "param.txt": "param()",
@@ -69,7 +68,7 @@ def main():
 
 
     finally:
-        logging.info("-"*100)
+        logging.info("-" * 100)
         log.shutdown()
 
 
