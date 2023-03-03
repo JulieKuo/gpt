@@ -1,11 +1,48 @@
 {
     "main": {
-        "{id}":"20230301000000"
+        "id": "20230303000000"
     },
     "condition": {
-        "{condition}": "判斷data的start_time欄位是否大於等於變數start_date，將結果指定給變數cond1。\n判斷data的end_time欄位是否小於等於變數end_date，將結果指定給變數cond2。\n如果only_ng等於字串'true'，就判斷data的false_triggered欄位是否不等於整數0，將結果指定給變數cond2。\n對data進行條件篩選，返回達成cond1且cond2且cond3的所有列，將結果指定給變數data。"
+        "conds":[
+            {   
+                "type1": "欄位",
+                "var1": "start_time",
+                "operator": "大於等於",
+                "type2": "變數",
+                "var2": "start_date",
+                "cond_id": "cond1"
+            },
+            {
+                "type1": "欄位",
+                "var1": "end_time",
+                "operator": "小於等於",
+                "type2": "變數",
+                "var2": "end_date",
+                "cond_id": "cond2"
+            },
+            {
+                "type1": "變數",
+                "var1": "only_ng",
+                "operator": "等於",
+                "type2": "custom",
+                "var2": "true",
+                "cond_id": "cond3"
+            },
+            {
+                "type1": "欄位",
+                "var1": "false_triggered",
+                "operator": "不等於",
+                "type2": "custom",
+                "var2": 0,
+                "cond_id": "cond4"
+            }
+        ],
+        "operators": "cond1 & cond2 & ((cond3 & con4) | (not cond3))"
     },
     "statistic": {
-        "{statistic}": "data為dataframe格式，將data的start_time欄位格式改成datetime。\n使用pd.Grouper()指定要分組的時間序列欄位，參數key等於'start_time'，頻率為週，將結果指定給變數freq。\n使用groupby()對data的(變數freq和欄位combination)做分群，將結果指定給data。\n計算data每個組內的所以數值型列的總和，將結果指定給data。\n使用reset_index()重設data的index，將結果指定給data。\n將data的欄位名稱指定給變數data_cols。\n使用reindex()重設data的欄位，參數columns等於data_cols、參數fill_value等於空字串。\n將data的start_time欄位格式改成string，參數format等於'%Y-%m-%d %H:%M:%S'。"
-    }
+        "freq": "週",
+        "columns": "combination",
+        "method": "平均"
+    },
+    "nick_name": "週平均"
 }

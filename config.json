@@ -1,8 +1,5 @@
 {
     "root": "C:\\Users\\tzuli\\Documents\\python\\gpt",
     "run_log": "logs\\log.log",
-    "api_key": "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",
-    "group_id": "r89",
-    "project_id": "p00001",
-    "id": "20230301000000"
+    "api_key": "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"
 }

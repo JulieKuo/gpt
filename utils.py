@@ -18,6 +18,32 @@ def activate_log(log, run_log_path):
 
 
 
+def condition(text, value):
+    if value["conds"] == "":
+        return ""
+    
+    condition = ""
+    for cond in value["conds"]:
+        for i in range(1, 3):
+            type_ = f"type{i}"
+            var = f"var{i}"
+            if cond[type_] == "欄位":
+                cond[type_] = "data的" + cond[type_]
+            elif cond[type_] == "custom":
+                cond[type_] = ""
+                if isinstance(cond[var], str):
+                    cond[var] = f"'{cond[var]}'"
+
+        condition += f'判斷{cond["type1"]}{cond["var1"]}是否{cond["operator"]}{cond["type2"]}{cond["var2"]}，將結果指定給變數{cond["cond_id"]}。\n'
+
+    condition += f'\n對data進行條件篩選，返回達成{value["operators"]}的所有列，將結果指定給變數data。'
+
+    text = text.replace("%condition%", condition)
+
+    return text
+
+
+
 def update_querys(data_path, query_path):
     input_path = os.path.join(data_path, "input.json")
 
@@ -27,21 +53,31 @@ def update_querys(data_path, query_path):
         input_ = json.load(f, encoding='cp950')
 
     for file, value1 in input_.items():
+        if file == "nick_name":
+            nick_name = value1
+            continue
+
         txt_path = os.path.join(query_path, f"{file}.txt")
         with open(txt_path, 'r', encoding = "utf-8") as f:
             text = f.read()
         
-        for key2, value2 in value1.items():
-            if value2 == "":
-                text = ""
-            else:
-                if key2 == "{id}":
-                    value2 = "t_" + value2
-                    
-                text = text.replace(f"{key2}", value2)
+        if file == "condition":
+            text = condition(text, value1)
+        else:
+            for key2, value2 in value1.items():
+                if value2 == "":
+                    text = ""
+                else:
+                    if key2 == "id":
+                        value2 = "t_" + value2
+                        id_ = value2
+                        
+                    text = text.replace(f"%{key2}%", value2)
 
         with open(txt_path, 'w', encoding = "utf-8") as f:
             f.write(text)
+    
+    return id_, nick_name
 
 
 
@@ -113,7 +149,7 @@ def save_response(response, src_path, time):
 
 
 
-def update_info(final_path, time):    
+def update_info(final_path, id_, nick_name):    
     info_path = os.path.join(final_path, 'meta_info.json')
     
     logging.info(f"Update {info_path}.")
@@ -127,10 +163,11 @@ def update_info(final_path, time):
 
     flag = False
     routes = [route["name"] for route in info["routes"]]
-    if time not in routes:
+    if id_ not in routes:
         new = {
-                "name": time,
-                "api_url": f"/api/r89/report/{time}"
+                "nick_name": nick_name,
+                "name": id_,
+                "api_url": f"/api/r89/report/{id_}"
             }
 
         info["routes"].append(new)
