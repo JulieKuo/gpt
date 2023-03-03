@@ -4,5 +4,5 @@ logs/*.log
 __pycache__
 
 !data/final_template/*
-!data/querys_template/*
+!data/queries_template/*
 !data/*/input.json
