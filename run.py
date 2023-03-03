@@ -7,34 +7,37 @@ import os, shutil, time, sys
 
 def main():
     try:
+        # get basic parameters
         config = read_config(config_path = ".\config.json")
         
         root = config["root"]
         data_path = os.path.join(root, "data", f"{sys.argv[1]}_{sys.argv[2]}")
-        query_path = os.path.join(data_path, "querys")
+        query_path = os.path.join(data_path, "queries")
         final_path = os.path.join(data_path, "final")
         src_path = os.path.join(final_path, "resources")
         run_log_path = os.path.join(root, config["run_log"])
         api_key = config["api_key"]
-        
-
-        if not os.path.exists(final_path):
-            shutil.copytree(os.path.join(root, "data", "final_template"), final_path)
-        
-        
-        if os.path.exists(query_path):
-            shutil.rmtree(query_path)
-        source_dir = os.path.join(root, "data", "querys_template")
-        shutil.copytree(source_dir, query_path)
 
         
         log = Log()
         logging = activate_log(log, run_log_path)
+        
 
+        # create a basic app server
+        if not os.path.exists(final_path):
+            shutil.copytree(os.path.join(root, "data", "final_template"), final_path)
+        
+        
+        # initialize and update queries
+        if os.path.exists(query_path):
+            shutil.rmtree(query_path)
+        source_dir = os.path.join(root, "data", "queries_template")
+        shutil.copytree(source_dir, query_path)
 
         id_, nick_name = update_querys(data_path, query_path)
 
         
+        # generate API by gpt
         responses = ""
         usages = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         query_info = {
@@ -51,6 +54,7 @@ def main():
             time.sleep(1)
 
 
+        # save related files
         save_response(responses, src_path, id_)
         flag = update_info(final_path, id_, nick_name)
         if flag:

@@ -19,7 +19,7 @@ def activate_log(log, run_log_path):
 
 
 def condition(text, value):
-    if value["conds"] == "":
+    if value["conds"] == "": # 若值為空字串，表示不需要該query，直接以空字串取代query的內容
         return ""
     
     condition = ""
@@ -27,11 +27,13 @@ def condition(text, value):
         for i in range(1, 3):
             type_ = f"type{i}"
             var = f"var{i}"
+
             if cond[type_] == "欄位":
                 cond[type_] = "data的" + cond[type_]
+
             elif cond[type_] == "custom":
                 cond[type_] = ""
-                if isinstance(cond[var], str):
+                if isinstance(cond[var], str): # 字串須加上''寫入到txt中
                     cond[var] = f"'{cond[var]}'"
 
         condition += f'判斷{cond["type1"]}{cond["var1"]}是否{cond["operator"]}{cond["type2"]}{cond["var2"]}，將結果指定給變數{cond["cond_id"]}。\n'
@@ -49,31 +51,35 @@ def update_querys(data_path, query_path):
 
     logging.info(f"Update querys from {input_path}.")
 
+    # 讀取input.json中的內容
     with open(input_path, 'rb') as f:
         input_ = json.load(f, encoding='cp950')
 
     for file, value1 in input_.items():
-        if file == "nick_name":
+        if file == "nick_name": # 保留nick_name，存到meta_info.json中
             nick_name = value1
             continue
-
+        
+        # 讀取初始化的query
         txt_path = os.path.join(query_path, f"{file}.txt")
         with open(txt_path, 'r', encoding = "utf-8") as f:
             text = f.read()
         
+        # 以input.json中的內容取代對應query的內容
         if file == "condition":
             text = condition(text, value1)
         else:
             for key2, value2 in value1.items():
-                if value2 == "":
+                if value2 == "": # 若值為空字串，表示不需要該query，直接以空字串取代query的內容
                     text = ""
                 else:
-                    if key2 == "id":
+                    if key2 == "id": # id須轉為t_YYYYMMDDhhmmss，作為API的class name使用
                         value2 = "t_" + value2
                         id_ = value2
                         
                     text = text.replace(f"%{key2}%", value2)
 
+        # 儲存更新後的query內容
         with open(txt_path, 'w', encoding = "utf-8") as f:
             f.write(text)
     
@@ -105,11 +111,11 @@ def connect_gpt(api_key, query):
         max_tokens = 3000,
         )
 
+    # 清洗回傳結果
     response1 = response['choices'][0]['text'].lstrip("\n")
     response1 = response1.replace("```python", "").replace("`", "").replace("程式碼：", "").strip("\n").strip()
 
     usage = response["usage"].to_dict()
-    # logging.info(usage)
 
     return response1, usage
 
@@ -117,7 +123,7 @@ def connect_gpt(api_key, query):
 
 def get_response(query_path, api_key, responses, usages, file_path, compair):
     query = get_query(query_path, file_path)
-    if query == "":
+    if query == "": # 若query沒有內容，不須提問
         logging.info("No query.")
         responses = responses.replace(compair, "")
 
@@ -125,12 +131,14 @@ def get_response(query_path, api_key, responses, usages, file_path, compair):
     
     response, usage = connect_gpt(api_key, query)
 
+    # 合併回傳結果至API主程式碼中
     if file_path != "main.txt":
-        response = f"{' '*8}" + response.replace("\n", f"\n{' '*8}")
+        response = f"{' '*8}" + response.replace("\n", f"\n{' '*8}") # 縮排處理
         responses = responses.replace(compair, f"\n{response}\n")
     else:
         responses += response
     
+    # 累計tokens總數
     for key in usages.keys():
         usages[key] += usage[key]
 
@@ -154,15 +162,19 @@ def update_info(final_path, id_, nick_name):
     
     logging.info(f"Update {info_path}.")
 
+    # 檢查meta_info.json是否已存在
     if not os.path.exists(info_path):
         with open(info_path, 'w') as f:
             json.dump({"routes": []}, f)
 
+    # 讀取meta_info.json
     with open(info_path, 'r') as f:
         info = json.load(f)
 
-    flag = False
-    routes = [route["name"] for route in info["routes"]]
+    flag = False # 是否新增route
+    routes = [route["name"] for route in info["routes"]] # 抓出現有routes的name
+
+    # 新增route
     if id_ not in routes:
         new = {
                 "nick_name": nick_name,
@@ -175,6 +187,7 @@ def update_info(final_path, id_, nick_name):
 
     info["last_update_time"] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
+    # 儲存更新後的meta_info.json
     with open(info_path, 'w') as f:
         json.dump(info, f, indent = 4)
     
@@ -190,8 +203,9 @@ def update_init(src_path, time):
     with open(init_path, 'r', encoding = "utf-8") as f:
         code = f.read()
 
+    # 新增package的載入動作至__init__.py
     new = f"from .{time} import {time}\n"
-    code = code.replace(new, "")
+    code = code.replace(new, "") # 必免出現重複的route
     code = new + code
 
     with open(init_path, 'w', encoding = "utf-8") as f:
@@ -208,8 +222,9 @@ def update_run(final_path, time):
         code = f.read()
     
     new = f'\napi.add_resource({time}, "/api/r89/report/{time}")'
-    code = code.replace(new, "")
+    code = code.replace(new, "") # 必免出現重複的route
 
+    # 新增api及route至run.py
     string = "Api(server)\n\n\n"
     index = code.find(string)
     code = code[:index] + string + new + code[index:].replace(string, "")
