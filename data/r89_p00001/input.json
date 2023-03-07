@@ -37,7 +37,7 @@
                 "cond_id": "cond4"
             }
         ],
-        "operators": "cond1 & cond2 & ((cond3 & con4) | (not cond3))"
+        "operators": "cond1 and cond2 & ((cond3 AND con4) Or (! cond3))"
     },
     "statistic": {
         "freq": "週",

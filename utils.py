@@ -1,4 +1,9 @@
 import os, openai, json, datetime
+from log_config import Log
+
+
+log = Log()
+logging = log.set_log(name = "util")
 
 
 
@@ -7,14 +12,6 @@ def read_config(config_path):
         config = json.load(f)
         
     return config
-
-
-
-def activate_log(log, run_log_path):
-    global logging
-    logging = log.set_log(filepath = run_log_path, level = 2, freq = "D", interval = 50)
-
-    return logging
 
 
 
@@ -37,10 +34,34 @@ def condition(text, value):
                     cond[var] = f"'{cond[var]}'"
 
         condition += f'判斷{cond["type1"]}{cond["var1"]}是否{cond["operator"]}{cond["type2"]}{cond["var2"]}，將結果指定給變數{cond["cond_id"]}。\n'
-
+    
+    value["operators"] = value["operators"].lower().replace("and", "&").replace("or", "|").replace("!", "not").replace("~", "not")
     condition += f'\n對data進行條件篩選，返回達成{value["operators"]}的所有列，將結果指定給變數data。'
 
     text = text.replace("%condition%", condition)
+
+    return text
+
+
+
+def statistic(text, value):
+    freq = value['freq']
+    columns = value['columns']
+
+    freq_text = f"使用pd.Grouper()指定要分組的時間序列欄位，參數key等於'start_time'，頻率為{freq}，將結果指定給變數freq。\n"
+    groupby_text = f"使用groupby()對data的(變數freq和欄位{columns})做分群，將結果指定給變數data。"
+    group = freq_text + groupby_text
+
+    if (freq == "") & (columns != ""):
+        text = text.replace("%group%", group).replace("頻率為", "頻率為秒")
+    elif (freq != "") & (columns == ""):
+        text = text.replace("%group%", group).replace("和欄位", "")
+    elif (freq != "") & (columns != ""):
+        text = text.replace("%group%", group)
+    else:  # 若值皆為空字串，表示不需要該query，直接以空字串取代query的內容
+        text = ""
+
+    text = text.replace("%method%", value['method'])
 
     return text
 
@@ -68,6 +89,8 @@ def update_querys(data_path, query_path):
         # 以input.json中的內容取代對應query的內容
         if file == "condition":
             text = condition(text, value1)
+        elif file == "statistic":
+            text = statistic(text, value1)
         else:
             for key2, value2 in value1.items():
                 if value2 == "": # 若值為空字串，表示不需要該query，直接以空字串取代query的內容
@@ -246,3 +269,5 @@ def save_status(data_path, status, usage):
 
     with open(result_path, 'w') as f:
         json.dump(result_dict, f, indent = 4)
+    
+    log.shutdown()

@@ -1,8 +1,7 @@
 使用Python生成以下程式碼，只返回代碼，不需其他解釋。
 
 data為dataframe格式，將data的start_time欄位格式改成datetime，將結果指定給變數data。
-使用pd.Grouper()指定要分組的時間序列欄位，參數key等於'start_time'，頻率為%freq%，將結果指定給變數freq。
-使用groupby()對data的(變數freq和欄位%columns%)做分群，將結果指定給變數data。
+%group%
 計算data每個組內的所以數值型列的%method%，將結果指定給變數data。
 使用reset_index()重設data的index，將結果指定給變數data。
 將data的欄位名稱指定給變數data_cols。

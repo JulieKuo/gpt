@@ -4,9 +4,17 @@ from utils import *
 import os, shutil, time, sys
 
 
+log = Log()
+logging = log.set_log(name = "run")
+
+
 
 def main():
     try:
+        # record parameters
+        logging.info(f"sys.argv = {sys.argv[1:]}")
+
+
         # get basic parameters
         config = read_config(config_path = ".\config.json")
         
@@ -15,12 +23,8 @@ def main():
         query_path = os.path.join(data_path, "queries")
         final_path = os.path.join(data_path, "final")
         src_path = os.path.join(final_path, "resources")
-        run_log_path = os.path.join(root, config["run_log"])
         api_key = config["api_key"]
 
-        
-        log = Log()
-        logging = activate_log(log, run_log_path)
         
 
         # create a basic app server
@@ -42,7 +46,7 @@ def main():
         usages = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         query_info = {
             "main.txt": "",
-            "param.txt": "param()",
+            "param.txt": "combs = param()",
             "sql_con.txt": "conn = sql_con()",
             "get_data.txt": "get_data()",
             "statistic.txt": "statistic()",
