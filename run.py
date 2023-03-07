@@ -46,7 +46,7 @@ def main():
         usages = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
         query_info = {
             "main.txt": "",
-            "param.txt": "combs = param()",
+            "param.txt": "param()",
             "sql_con.txt": "conn = sql_con()",
             "get_data.txt": "get_data()",
             "statistic.txt": "statistic()",
