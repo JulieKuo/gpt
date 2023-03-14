@@ -47,15 +47,19 @@ def condition(text, value):
 def statistic(text, value):
     freq = value['freq']
     columns = value['columns']
+    combination = value['combination']
 
     freq_text = f"使用pd.Grouper()指定要分組的時間序列欄位，參數key等於'start_time'，頻率為{freq}，將結果指定給變數freq。\n"
-    groupby_text = f"使用groupby()對data的(變數freq和欄位{columns})做分群，將結果指定給變數data。"
+    if combination:
+        groupby_text = f"使用groupby()對data的(變數freq和欄位combination、{columns})做分群，將結果指定給變數data。"
+    else:
+        groupby_text = f"使用groupby()對data的(變數freq和欄位{columns})做分群，將結果指定給變數data。"
     group = freq_text + groupby_text
-
+    
     if (freq == "") & (columns != ""):
         text = text.replace("%group%", group).replace("頻率為", "頻率為秒")
     elif (freq != "") & (columns == ""):
-        text = text.replace("%group%", group).replace("和欄位", "")
+        text = text.replace("%group%", group).replace("和欄位)", ")").replace("、)", ")")
     elif (freq != "") & (columns != ""):
         text = text.replace("%group%", group)
     else:  # 若值皆為空字串，表示不需要該query，直接以空字串取代query的內容

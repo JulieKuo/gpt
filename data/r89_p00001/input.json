@@ -41,7 +41,8 @@
     },
     "statistic": {
         "freq": "週",
-        "columns": "combination",
+        "columns": "",
+        "combination": 1,
         "method": "平均"
     },
     "nick_name": "週平均"
