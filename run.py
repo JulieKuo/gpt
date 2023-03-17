@@ -44,14 +44,7 @@ def main():
         # generate API by gpt
         responses = ""
         usages = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
-        query_info = {
-            "main.txt": "",
-            "param.txt": "combs = param()",
-            "sql_con.txt": "conn = sql_con()",
-            "get_data.txt": "get_data()",
-            "statistic.txt": "statistic()",
-            "condition.txt": "condition()"
-        }
+        query_info = read_config(config_path = os.path.join(query_path, "query_config.json"))
 
         for file_path, compair in query_info.items():
             responses, usages = get_response(query_path, api_key, responses, usages, file_path, compair)

@@ -1,9 +1,9 @@
 使用Python生成以下程式碼，只返回代碼，不需其他解釋。
 
-data為dataframe格式，將data的start_time欄位格式改成datetime，將結果指定給變數data。
+變數data為dataframe格式，將data的欄位start_time格式改成datetime，將結果指定給變數data。
 %group%
-計算data每個組內的所以數值型列的%method%，將結果指定給變數data。
-使用reset_index()重設data的index，將結果指定給變數data。
-將data的欄位名稱指定給變數data_cols。
-使用reindex()重設data的欄位，參數columns等於data_cols、參數fill_value等於空字串，將結果指定給變數data。
-將data的start_time欄位格式改成string，參數format等於'%Y-%m-%d %H:%M:%S'，將結果指定給變數data。
+計算變數data每個組內的所有數值型欄位的%method%，將結果指定給變數data。
+使用reset_index()重設變數data的索引，參數drop等於False，將結果指定給變數data。
+將變數data的欄位名稱指定給變數data_cols。
+使用reindex()重設變數data的欄位，參數columns等於變數data_cols、參數fill_value等於空字串，將結果指定給變數data。
+使用strftime()將變數data的欄位start_time格式改成string，參數format等於'%Y-%m-%d %H:%M:%S'，將結果指定給變數data。

@@ -33,10 +33,10 @@ def condition(text, value):
                 if isinstance(cond[var], str): # 字串須加上''寫入到txt中
                     cond[var] = f"'{cond[var]}'"
 
-        condition += f'判斷{cond["type1"]}{cond["var1"]}是否{cond["operator"]}{cond["type2"]}{cond["var2"]}，將結果指定給變數{cond["cond_id"]}。\n'
+        condition += f'判斷變數{cond["type1"]}{cond["var1"]}是否{cond["operator"]}{cond["type2"]}{cond["var2"]}，將結果指定給變數{cond["cond_id"]}。\n'
     
     value["operators"] = value["operators"].lower().replace("and", "&").replace("or", "|").replace("!", "not").replace("~", "not")
-    condition += f'\n對data進行條件篩選，返回達成{value["operators"]}的所有列，將結果指定給變數data。'
+    condition += f'\n對變數data進行條件篩選，返回達成{value["operators"]}的所有列，將結果指定給變數data。'
 
     text = text.replace("%condition%", condition)
 
@@ -140,7 +140,7 @@ def connect_gpt(api_key, query):
 
     # 清洗回傳結果
     response1 = response['choices'][0]['text'].lstrip("\n")
-    response1 = response1.replace("```python", "").replace("`", "").replace("程式碼：", "").strip("\n").strip()
+    response1 = response1.replace("```python", "").replace("`", "").replace("程式碼：", "").replace("code:", "").strip("\n").strip()
 
     usage = response["usage"].to_dict()
 

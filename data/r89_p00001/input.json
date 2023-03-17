@@ -2,6 +2,13 @@
     "main": {
         "id": "20230303000000"
     },
+    "sql_con": {
+        "host": "192.168.1.206", 
+        "port": "3306", 
+        "user": "aiuser",
+        "password": "123EWQasdCXZ",
+        "db": "hermesai"
+    },
     "condition": {
         "conds":[
             {   
@@ -40,7 +47,7 @@
         "operators": "cond1 and cond2 & ((cond3 AND con4) Or (! cond3))"
     },
     "statistic": {
-        "freq": "週",
+        "freq": "日",
         "columns": "",
         "combination": 1,
         "method": "平均"

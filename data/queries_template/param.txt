@@ -3,6 +3,14 @@
 使用request.args.get()接收參數start_date，將結果指定給變數start_date。
 使用request.args.get()接收參數end_date，將結果指定給變數end_date。
 使用request.args.get()接收參數only_ng，將結果指定給變數only_ng。
-使用request.args.getlist()接收參數combs[]，將結果指定給變數combs。
 
-end_date加上字串' 23:59:59'，將結果指定給變數end_date。
+變數end_date加上字串' 23:59:59'，將結果指定給變數end_date。
+
+以下為try-except例外處理:
+在try區塊執行以下動作:
+使用request.args.get()接收參數combs[]，將結果指定給變數table_info。
+使用json.loads()將變數table_info轉換為JSON格式，將結果指定給變數table_info。
+在except區塊執行以下動作:
+使用request.args.getlist()接收參數combs[]，將結果指定給變數table_info。
+
+try-except例外處理結束。
