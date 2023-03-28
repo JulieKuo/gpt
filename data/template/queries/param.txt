@@ -1,0 +1,8 @@
+使用Python生成以下程式碼，只返回代碼，不需其他解釋。
+
+使用request.get_json()從請求中取得 JSON 格式的資料，將結果指定給變數body。
+
+從變數body中抓出start_date鍵，將結果指定給變數start_date。
+從變數body中抓出end_date鍵，將結果指定給變數end_date。
+從變數body中抓出combs鍵，將結果指定給變數combs。
+從變數body中抓出only_ng鍵，將結果指定給變數only_ng。

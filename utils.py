@@ -206,7 +206,7 @@ def update_info(final_path, id_, nick_name):
         new = {
                 "nick_name": nick_name,
                 "name": id_,
-                "api_url": f"/api/r89/report/{id_}"
+                "api_url": f"/api/custom/report/{id_}"
             }
 
         info["routes"].append(new)
@@ -248,7 +248,7 @@ def update_run(final_path, time):
     with open(run_path, 'r', encoding = "utf-8") as f:
         code = f.read()
     
-    new = f'\napi.add_resource({time}, "/api/r89/report/{time}")'
+    new = f'\napi.add_resource({time}, "/api/custom/report/{time}")'
     code = code.replace(new, "") # 必免出現重複的route
 
     # 新增api及route至run.py

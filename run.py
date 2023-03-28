@@ -29,13 +29,13 @@ def main():
 
         # create a basic app server
         if not os.path.exists(final_path):
-            shutil.copytree(os.path.join(root, "data", "final_template"), final_path)
+            shutil.copytree(os.path.join(root, "data", "template", "final"), final_path)
         
         
         # initialize and update queries
         if os.path.exists(query_path):
             shutil.rmtree(query_path)
-        source_dir = os.path.join(root, "data", "queries_template")
+        source_dir = os.path.join(root, "data", "template", "queries")
         shutil.copytree(source_dir, query_path)
 
         id_, nick_name = update_querys(data_path, query_path)

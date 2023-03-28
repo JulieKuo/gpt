@@ -1,6 +1,6 @@
 {
     "main": {
-        "id": "20230303000000"
+        "id": "20230328000000"
     },
     "sql_con": {
         "host": "192.168.1.206", 
@@ -32,7 +32,7 @@
                 "var1": "only_ng",
                 "operator": "等於",
                 "type2": "custom",
-                "var2": "true",
+                "var2": true,
                 "cond_id": "cond3"
             },
             {
@@ -47,10 +47,10 @@
         "operators": "cond1 and cond2 & ((cond3 AND con4) Or (! cond3))"
     },
     "statistic": {
-        "freq": "日",
+        "freq": "",
         "columns": "",
         "combination": 1,
-        "method": "平均"
+        "method": ""
     },
-    "nick_name": "週平均"
+    "nick_name": "工單查詢"
 }

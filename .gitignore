@@ -3,6 +3,5 @@ data/*/*
 logs/*.log
 __pycache__
 
-!data/final_template/*
-!data/queries_template/*
+!data/template/*
 !data/*/input.json

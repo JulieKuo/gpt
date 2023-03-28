@@ -1,14 +1,13 @@
 使用Python生成以下程式碼，只返回代碼，不需其他解釋。
 
 
-使用isinstance()判斷變數table_info是否為dict，將結果指定給變數table_cond。
+使用isinstance()判斷變數combs是否為dict，將結果指定給變數combs_cond。
 以下為if-else判斷式:
-如果變數table_cond成立，執行以下動作:
-抓出變數table_info的comb_name鍵的值，將結果指定給變數comb_name。
-抓出變數table_info的period鍵的值，將結果指定給變數period。
+如果變數combs_cond成立，執行以下動作:
+使用keys()抓出變數combs的所有鍵，並轉換為list，將結果指定給變數comb_name。
 
 否則，執行以下動作:
-把變數table_info指定給變數comb_name。
+把變數combs指定給變數comb_name。
 
 if-else判斷式結束。
 

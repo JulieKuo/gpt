@@ -3,10 +3,10 @@
 從flask_restful載入Resource
 從flask載入request和jsonify
 載入pandas命名為pd
-載入pymysql, json
+載入pymysql
 
 定義一個%id%類別，此類別繼承Resource類別的功能。
-在%id%類別中定義一個get()方法，方法內容如下。
+在%id%類別中定義一個post()方法，方法內容如下。
 
 param()
 
