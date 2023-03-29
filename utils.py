@@ -15,6 +15,26 @@ def read_config(config_path):
 
 
 
+def update_input(input_):
+    default = {
+        "host": "localhost", 
+        "port": "3306", 
+        "user": "aiuser",
+        "password": "123EWQasdCXZ",
+        "db": "hermesai"
+    }
+
+    if "sql_con" in input_.keys():
+        default.update(input_["sql_con"])
+        input_["sql_con"] = default
+    else:
+        input_["sql_con"] = default
+
+    return input_
+
+
+
+
 def condition(text, value):
     if value["conds"] == "": # 若值為空字串，表示不需要該query，直接以空字串取代query的內容
         return ""
@@ -79,6 +99,9 @@ def update_querys(data_path, query_path):
     # 讀取input.json中的內容
     with open(input_path, 'rb') as f:
         input_ = json.load(f, encoding='cp950')
+    
+    # 更新SQL connection資訊
+    input_ = update_input(input_)
 
     for file, value1 in input_.items():
         if file == "nick_name": # 保留nick_name，存到meta_info.json中
