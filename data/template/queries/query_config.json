@@ -1,10 +1,10 @@
 {
     "main.txt": "",
-    "param.txt": "param()",
-    "sql_con.txt": "sql_con()",
-    "get_table.txt": "get_table()",
-    "get_data.txt": "get_data()",
-    "period.txt": "period()",
-    "statistic.txt": "statistic()",
-    "condition.txt": "condition()"
+    "param.txt": "param = param()",
+    "sql_con.txt": "sql_con = sql_con()",
+    "get_table.txt": "get_table = get_table()",
+    "get_data.txt": "get_data = get_data()",
+    "period.txt": "period = period()",
+    "condition.txt": "condition = condition()",
+    "statistic.txt": "statistic = statistic()"
 }

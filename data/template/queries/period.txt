@@ -1,11 +1,10 @@
 使用Python生成以下程式碼，只返回代碼，不需其他解釋。
 
-指定一個空的dataframe給變數res4。
-
 使用isinstance()判斷變數combs是否為dict，將結果指定給變數combs_cond。
 以下為if-else判斷式:
 如果變數combs_cond成立，執行以下動作:
 
+指定一個空的dataframe給變數res4。
 使用第一層for迴圈依序抓出變數combs中的鍵和值，鍵的變數名稱為comb，值的變數名稱為periods。
 以下為第一層for迴圈中的動作:
 
@@ -17,9 +16,12 @@
 對變數data進行條件篩選，返回達成(cond1 & cond2 & cond3)的所有列，將結果指定給變數df4。
 使用pd.concat()合併變數res4、變數df4，並將結果指定給變數res4。
 
-複製變數res4並指定給變數data。
-
 第一層for迴圈結束。
 第二層for迴圈結束。
+if-else判斷式結束。
 
+判斷變數res4是否在locals()裡，將結果指定給變數res4_cond。
+以下為if-else判斷式:
+如果變數res4_cond成立，執行以下動作:
+複製變數res4並指定給變數data。
 if-else判斷式結束。

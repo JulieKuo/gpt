@@ -8,19 +8,13 @@
 定義一個%id%類別，此類別繼承Resource類別的功能。
 在%id%類別中定義一個post()方法，方法內容如下。
 
-param()
-
-sql_con()
-
-get_table()
-
-get_data()
-
-period()
-
-condition()
-
-statistic()
+param = param()
+sql_con = sql_con()
+get_table = get_table()
+get_data = get_data()
+period = period()
+condition = condition()
+statistic = statistic()
 
 
 使用sort_values()對變數data的欄位start_time做降序，將結果指定給變數data。
