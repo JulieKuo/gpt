@@ -2,7 +2,8 @@
 
 使用request.get_json()從請求中取得 JSON 格式的資料，將結果指定給變數body。
 
-從變數body中抓出start_date鍵，將結果指定給變數start_date。
-從變數body中抓出end_date鍵，將結果指定給變數end_date。
-從變數body中抓出combs鍵，將結果指定給變數combs。
-從變數body中抓出only_ng鍵，將結果指定給變數only_ng。
+使用get()取出變數body中key為'start_date'的value，如果變數body沒有'start_date'這個key，則回傳變數start_date作為預設值，將結果指定給變數start_date。
+使用get()取出變數body中key為'end_date'的value，如果變數body沒有'end_date'這個key，則回傳變數end_date作為預設值，將結果指定給變數end_date。
+使用get()取出變數body中key為'combs'的value，如果變數body沒有'combs'這個key，則回傳None作為預設值，將結果指定給變數combs。
+使用get()取出變數body中key為'only_ng'的value，如果變數body沒有'only_ng'這個key，則回傳False作為預設值，將結果指定給變數only_ng。
+使用get()取出變數body中key為'file_path'的value，如果變數body沒有'file_path'這個key，則回傳None作為預設值，將結果指定給變數file_path。

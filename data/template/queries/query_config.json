@@ -6,5 +6,6 @@
     "get_data.txt": "get_data = get_data()",
     "period.txt": "period = period()",
     "condition.txt": "condition = condition()",
-    "statistic.txt": "statistic = statistic()"
+    "statistic.txt": "statistic = statistic()",
+    "date_type.txt": "date_type = date_type()"
 }

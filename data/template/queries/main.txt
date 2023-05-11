@@ -2,11 +2,17 @@
 
 從flask_restful載入Resource
 從flask載入request和jsonify
+從datetime載入datetime
 載入pandas命名為pd
 載入pymysql
 
 定義一個%id%類別，此類別繼承Resource類別的功能。
 在%id%類別中定義一個post()方法，方法內容如下。
+
+使用datetime()來指定時間，參數year等於1000，參數month等於1，參數day等於1，將結果指定給變數start_date。
+使用datetime.now()獲得當前時間，將結果指定給變數end_date。
+對變數start_date使用strftime()將datetime轉換為string格式，參數format等於'%Y-%m-%d %H:%M:%S'，將結果指定給變數start_date。
+對變數end_date使用strftime()將datetime轉換為string格式，參數format等於'%Y-%m-%d %H:%M:%S'，將結果指定給變數end_date。
 
 param = param()
 sql_con = sql_con()
@@ -16,12 +22,11 @@ period = period()
 condition = condition()
 statistic = statistic()
 
-
 使用sort_values()對變數data的欄位start_time做降序，將結果指定給變數data。
 使用reset_index()重設變數data的索引，參數drop等於True，將結果指定給變數data。
 使用fillna()填補變數data的缺失值，參數value等於空字串，將結果指定給變數data。
-使用to_dict()將變數data轉為字典，參數orient等於'records'，將結果指定給變數res_dict。
-建立一個字典，key1為'type'，value1為0；key2為'data'，value2為變數res_dict，將結果指定給變數result。
+
+date_type = date_type()
 
 使用close()關閉變數conn的SQL連線。
 

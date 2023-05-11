@@ -2,8 +2,9 @@ import os, openai, json, datetime
 from log_config import Log
 
 
+
 log = Log()
-logging = log.set_log(name = "util")
+logging = log.set_log(filepath = "logs/log.log", level = 2, freq = "D", interval = 1, backup = 2)
 
 
 
@@ -296,5 +297,3 @@ def save_status(data_path, status, usage):
 
     with open(result_path, 'w') as f:
         json.dump(result_dict, f, indent = 4)
-    
-    log.shutdown()

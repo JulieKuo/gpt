@@ -1,11 +1,6 @@
-from log_config import Log
-from traceback import format_exc
 from utils import *
+from traceback import format_exc
 import os, shutil, time, sys
-
-
-log = Log()
-logging = log.set_log(name = "run")
 
 
 
@@ -24,7 +19,6 @@ def main():
         final_path = os.path.join(data_path, "final")
         src_path = os.path.join(final_path, "resources")
         api_key = config["api_key"]
-
         
 
         # create a basic app server
@@ -48,7 +42,7 @@ def main():
 
         for file_path, compair in query_info.items():
             responses, usages = get_response(query_path, api_key, responses, usages, file_path, compair)
-            time.sleep(1)
+            time.sleep(2)
 
 
         # save related files
@@ -73,5 +67,6 @@ def main():
 
 
 
+# call: python run.py "test" "p00001"
 if __name__ == '__main__':
     main()

@@ -1,6 +1,0 @@
-Paul: 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
-Jaco: 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
-Julie: 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
-
-
-1. 任意輸入可能要先固定幾個輸入項目，以符合API所需接受的參數
