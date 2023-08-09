@@ -1,7 +1,4 @@
 chart
-data/*/*
+data/
 logs/*.log
 __pycache__
-
-!data/template/*
-!data/*/input.json
